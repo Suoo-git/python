@@ -12,7 +12,7 @@ loginId = ""
 # def disconn():
 #     conn.close()
 
-def sign_up(): # 아이디 중복기능 추가하기
+def sign_up(): 
     print("3~6글자의 영문 대소문자, 숫자의 조합으로 만들어 주세요")
     id = input("ID : ")
     reg = '^[A-Za-z0-9]{3,6}$' # id = 영문 대소문자 숫자 3자 이상 6자 이하로 한다.
@@ -26,16 +26,18 @@ def sign_up(): # 아이디 중복기능 추가하기
     if not re.search(reg, pw):
         print("False pw")
         return
-        
-    cursor = conn.cursor()
-    sql = '''
-    INSERT INTO user (user_id, user_score, user_pw, playTime)
-    values (%s, %s, %s, %s)
-    '''
-    cursor.execute(sql, (id, 0, pw, 0))
+    
+    try:    
+        cursor = conn.cursor()
+        sql = '''
+        INSERT INTO user (user_id, user_score, user_pw, playTime)
+        values (%s, %s, %s, %s)
+        '''
+        cursor.execute(sql, (id, 0, pw, 0))
+    except pymysql.err.IntegrityError: #user_id -> unique index (중복 불허)
+        print("\nError : duplciate ID\nretry\n")
     conn.commit()
     cursor.close()
-    # disconn()
 
 
 def login():
