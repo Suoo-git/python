@@ -34,7 +34,7 @@ def sign_up():
         values (%s, %s, %s, %s)
         '''
         cursor.execute(sql, (id, 0, pw, 0))
-    except pymysql.err.IntegrityError: #user_id -> unique index (중복 불허)
+    except pymysql.err.IntegrityError:          #user_id -> unique index (중복 불허)
         print("\nError : duplciate ID\nretry\n")
     conn.commit()
     cursor.close()
@@ -119,7 +119,7 @@ def play():
             print("남은 시간 : ", 30 - round(Time),'초\n')  # 제한시간
         
         print("시간이 초과했습니다. 경과시간 = %d초" %round(Time))
-        print("Score : %d" %score)
+        print("Finish Score : %d" %score)
         return score, Time
 
 
@@ -155,8 +155,8 @@ def rank():
         if count == 6:
             break    
     print("")
-
-
+    
+    
 def info():
     if loginId == "":
         print("pls login\n")
@@ -172,8 +172,12 @@ def info():
         
 
 while True :
-    print('1. sign up\n2. login\n3. logout\n4. Play quiz\n5. Rank\n6. update quiz\n7. Info\n0. Exit\n')
+    print("-----SELECT------")
+    print('1. sign up\n2. login\n3. logout\n4. Play quiz\n5. Rank\n6. update quiz\n7. Info\n0. Exit')
+    print("-----------------")
     num = input('input number : ')
+    print("-----------------")
+
     if num == '1':
         sign_up()
     elif num == '2':
@@ -181,8 +185,11 @@ while True :
     elif num == '3':
         logout()
     elif num == '4':
-        score, time = play()
-        update_score(score, time, loginId)
+        try:                    # 로그인이 안되어 있을시 오류
+            score, time = play()
+            update_score(score, time, loginId)
+        except:
+            continue
     elif num == '5':
         rank()
     elif num == '6':
