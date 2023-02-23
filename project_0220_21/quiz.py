@@ -13,7 +13,7 @@ loginId = ""
 #     conn.close()
 
 def sign_up(): 
-    print("3~6글자의 영문 대소문자, 숫자의 조합으로 만들어 주세요")
+    print("영문 대소문자, 숫자만 사용이 가능합니다. 3자 이상 6자 이하로 만들어주세요")
     id = input("ID : ")
     reg = '^[A-Za-z0-9]{3,6}$' # id = 영문 대소문자 숫자 3자 이상 6자 이하로 한다.
     if not re.search(reg, id):
@@ -37,13 +37,12 @@ def sign_up():
     except pymysql.err.IntegrityError:          #user_id -> unique index (중복 불허)
         print("\nError : duplciate ID\nretry\n")
     conn.commit()
-    cursor.close()
 
 
 def login():
     global loginId
     if loginId != "":
-        print('\nlogin on\n')
+        print('\nlogIn on\n')
         return 
     try:
         user_id = input("ID : ")
@@ -53,10 +52,10 @@ def login():
         '''
         cursor.execute(sql, user_id)
         row = cursor.fetchone()
-        user_pw = input("PW : ")
+        user_pw = input("PW : ")        
         if row[2] == user_pw:
             loginId = user_id
-            print("\nsuccess login\n")
+            print("\nsuccess logIn\n")
         else:
             print("\nFalse PW\n")
     except:
@@ -66,7 +65,7 @@ def login():
 def logout():
     global loginId
     if loginId == "":
-        print("pls login\n")
+        print("pls logIn\n")
         return
     loginId = ""
     print("logOut!\n")
@@ -146,20 +145,30 @@ def rank():
     '''
     cursor.execute(sql)
     result = cursor.fetchall()
+    for j in result:
+        if j[1] == loginId:
+            myscore = j[0]
     sort = sorted(result, reverse=True)
     count = 1
-    print("순위  아이디  점수")
+    mycount = '순위 외'
+    print("Rank  ID      Score")
     for i in sort:
         print('%-5d' %count, '%-7s' %i[1], i[0])
+        if i[1] == loginId:
+            mycount = count
         count +=1
         if count == 6:
-            break    
+            break
+    try:
+        print("MY SCORE : ",myscore, "MY RANK :",mycount)
+    except:
+        print("My RANK : Not login")
     print("")
     
     
 def info():
     if loginId == "":
-        print("pls login\n")
+        print("pls logIn\n")
     else:    
         cursor = conn.cursor()
         sql = '''
@@ -173,7 +182,7 @@ def info():
 
 while True :
     print("-----SELECT------")
-    print('1. sign up\n2. login\n3. logout\n4. Play quiz\n5. Rank\n6. update quiz\n7. Info\n0. Exit')
+    print('1. sign up\n2. logIn\n3. logOut\n4. Play quiz\n5. Rank\n6. update quiz\n7. Info\n0. Exit')
     print("-----------------")
     num = input('input number : ')
     print("-----------------")
