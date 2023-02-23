@@ -4,7 +4,7 @@ import random
 import re
 
 conn = pymysql.connect( 
-host='127.0.0.1', user='root', password='wpdjvks1',
+host='127.0.0.1', user='root', password='1234',
 db='quiz', charset='utf8') # 데이터베이스 접속
 
 loginId = ""
@@ -26,7 +26,7 @@ def sign_up():
     if not re.search(reg, pw):
         print("False pw")
         return
-    
+    print("sign up success")
     try:    
         cursor = conn.cursor()
         sql = '''
@@ -96,7 +96,7 @@ def play():
         result = cursor.fetchall()
         Time = 0
         score = 0
-        while True:
+        while True:         # 퀴즈를 랜덤으로 불러온다.
             start_time = time.time()
             random_num = random.randrange(0, len(result))
             quiz_name = result[random_num][1]
@@ -160,7 +160,7 @@ def rank():
         if count == 6:
             break
     try:
-        print("MY SCORE : ",myscore, "MY RANK :",mycount)
+        print("MY RANK :",mycount ,"\nMY SCORE : ",myscore, )
     except:
         print("My RANK : Not login")
     print("")
@@ -181,7 +181,7 @@ def info():
         
 
 while True :
-    print("-----SELECT------")
+    print("\n-----SELECT------")
     print('1. sign up\n2. logIn\n3. logOut\n4. Play quiz\n5. Rank\n6. update quiz\n7. Info\n0. Exit')
     print("-----------------")
     num = input('input number : ')
