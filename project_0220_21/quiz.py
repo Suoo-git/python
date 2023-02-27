@@ -4,7 +4,7 @@ import random
 import re
 
 conn = pymysql.connect( 
-host='127.0.0.1', user='root', password='wpdjvks1',
+host='10.10.21.39', user='root', password='wpdjvks1',
 db='quiz', charset='utf8') # 데이터베이스 접속
 
 loginId = ""
