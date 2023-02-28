@@ -4,7 +4,7 @@ import random
 import re
 
 conn = pymysql.connect( 
-host='127.0.0.1', user='root', password='1234',
+host='10.10.21.39', user='root', password='wpdjvks1',
 db='quiz', charset='utf8') # 데이터베이스 접속
 
 loginId = ""
@@ -13,7 +13,7 @@ loginId = ""
 #     conn.close()
 
 def sign_up(): 
-    print("영문 대소문자, 숫자만 사용이 가능합니다. 3자 이상 6자 이하로 만들어주세요")
+    print("3~6글자의 영문 대소문자, 숫자의 조합으로 만들어 주세요")
     id = input("ID : ")
     reg = '^[A-Za-z0-9]{3,6}$' # id = 영문 대소문자 숫자 3자 이상 6자 이하로 한다.
     if not re.search(reg, id):
@@ -26,7 +26,7 @@ def sign_up():
     if not re.search(reg, pw):
         print("False pw")
         return
-    print("sign up success")
+    
     try:    
         cursor = conn.cursor()
         sql = '''
@@ -37,12 +37,13 @@ def sign_up():
     except pymysql.err.IntegrityError:          #user_id -> unique index (중복 불허)
         print("\nError : duplciate ID\nretry\n")
     conn.commit()
+    cursor.close()
 
 
 def login():
     global loginId
     if loginId != "":
-        print('\nlogIn on\n')
+        print('\nlogin on\n')
         return 
     try:
         user_id = input("ID : ")
@@ -52,10 +53,10 @@ def login():
         '''
         cursor.execute(sql, user_id)
         row = cursor.fetchone()
-        user_pw = input("PW : ")        
+        user_pw = input("PW : ")
         if row[2] == user_pw:
             loginId = user_id
-            print("\nsuccess logIn\n")
+            print("\nsuccess login\n")
         else:
             print("\nFalse PW\n")
     except:
@@ -65,7 +66,7 @@ def login():
 def logout():
     global loginId
     if loginId == "":
-        print("pls logIn\n")
+        print("pls login\n")
         return
     loginId = ""
     print("logOut!\n")
@@ -96,7 +97,7 @@ def play():
         result = cursor.fetchall()
         Time = 0
         score = 0
-        while True:         # 퀴즈를 랜덤으로 불러온다.
+        while True:
             start_time = time.time()
             random_num = random.randrange(0, len(result))
             quiz_name = result[random_num][1]
@@ -145,30 +146,20 @@ def rank():
     '''
     cursor.execute(sql)
     result = cursor.fetchall()
-    for j in result:
-        if j[1] == loginId:
-            myscore = j[0]
     sort = sorted(result, reverse=True)
     count = 1
-    mycount = '순위 외'
-    print("Rank  ID      Score")
+    print("순위  아이디  점수")
     for i in sort:
         print('%-5d' %count, '%-7s' %i[1], i[0])
-        if i[1] == loginId:
-            mycount = count
         count +=1
         if count == 6:
-            break
-    try:
-        print("MY RANK :",mycount ,"\nMY SCORE : ",myscore, )
-    except:
-        print("My RANK : Not login")
+            break    
     print("")
     
     
 def info():
     if loginId == "":
-        print("pls logIn\n")
+        print("pls login\n")
     else:    
         cursor = conn.cursor()
         sql = '''
@@ -181,8 +172,8 @@ def info():
         
 
 while True :
-    print("\n-----SELECT------")
-    print('1. sign up\n2. logIn\n3. logOut\n4. Play quiz\n5. Rank\n6. update quiz\n7. Info\n0. Exit')
+    print("-----SELECT------")
+    print('1. sign up\n2. login\n3. logout\n4. Play quiz\n5. Rank\n6. update quiz\n7. Info\n0. Exit')
     print("-----------------")
     num = input('input number : ')
     print("-----------------")
