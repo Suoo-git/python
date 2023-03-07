@@ -1,31 +1,43 @@
 body{
     background-color:cornsilk;
 }
-
-h3{
-    color: red;
-    font-size: 300%;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+table{
+    border-collapse: collapse;
+    width: 100%;    
 }
 
-.c{
-    color: blue;
-    font-size: 160%;
-    font-family: 'Courier New', Courier, monospace;
-    border: 1px solid black;
-    padding: 20px;
-    margin: 50px;
-}   
-a:link{  color: green;
-    background-color: transparent;
+tr, td{
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid  ;
+}
+tr:nth-child(even){
+    background-color:lightsteelblue;
+}
+td:hover{
+    background-color: yellow;
+}
+
+ul{
+    list-style: none;
+    background-color: lightcoral;
+    margin: 10px;
+    padding: 0;
+    width: 100px;
+}
+li a{
+    color: black;
+    padding: 5px;
     text-decoration: none;
+    display: block;
+    text-align: center;
+    border-bottom: 1px solid ;
 }
-a:visited{
-    color: pink;
+li a:hover{
+    background-color: deepskyblue;
 }
-a:hover{
-    color: red;
-}
-a:active{
-    color: yellow;
+
+.daum{
+    background-color: violet;
+    color: whitesmoke;
 }
